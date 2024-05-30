@@ -6,10 +6,8 @@
 package org.openapitools.api;
 
 import org.openapitools.model.Person;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,18 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
@@ -69,24 +62,11 @@ public interface PersonenApi {
         value = "/personen",
         produces = { "application/json" }
     )
-    
-    default ResponseEntity<List<Person>> readPersonenBySearchParams(
+
+    ResponseEntity<List<Person>> readPersonenBySearchParams(
         @Parameter(name = "vorname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "vorname", required = false) String vorname,
         @Parameter(name = "nachname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "nachname", required = false) String nachname,
         @Parameter(name = "iban", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "iban", required = false) String iban,
         @Parameter(name = "email", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "email", required = false) String email
-    ) {
-        getRequest().ifPresent(request -> {
-            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "[ { \"kommunikationsadressen\" : [ { \"telefon\" : \"telefon\", \"id\" : 1, \"email\" : \"email\" }, { \"telefon\" : \"telefon\", \"id\" : 1, \"email\" : \"email\" } ], \"vorname\" : \"vorname\", \"nachname\" : \"nachname\", \"geschlecht\" : \"u\", \"anschriften\" : [ { \"ort\" : \"ort\", \"strasse\" : \"strasse\", \"hausnummer\" : \"hausnummer\", \"land\" : \"land\", \"id\" : 6, \"plz\" : \"plz\" }, { \"ort\" : \"ort\", \"strasse\" : \"strasse\", \"hausnummer\" : \"hausnummer\", \"land\" : \"land\", \"id\" : 6, \"plz\" : \"plz\" } ], \"id\" : 0, \"bankverbindungen\" : [ { \"kontonummer\" : \"kontonummer\", \"bankleitzahl\" : \"bankleitzahl\", \"iban\" : \"iban\", \"land\" : \"land\", \"id\" : 5, \"bankname\" : \"bankname\", \"bic\" : \"bic\" }, { \"kontonummer\" : \"kontonummer\", \"bankleitzahl\" : \"bankleitzahl\", \"iban\" : \"iban\", \"land\" : \"land\", \"id\" : 5, \"bankname\" : \"bankname\", \"bic\" : \"bic\" } ] }, { \"kommunikationsadressen\" : [ { \"telefon\" : \"telefon\", \"id\" : 1, \"email\" : \"email\" }, { \"telefon\" : \"telefon\", \"id\" : 1, \"email\" : \"email\" } ], \"vorname\" : \"vorname\", \"nachname\" : \"nachname\", \"geschlecht\" : \"u\", \"anschriften\" : [ { \"ort\" : \"ort\", \"strasse\" : \"strasse\", \"hausnummer\" : \"hausnummer\", \"land\" : \"land\", \"id\" : 6, \"plz\" : \"plz\" }, { \"ort\" : \"ort\", \"strasse\" : \"strasse\", \"hausnummer\" : \"hausnummer\", \"land\" : \"land\", \"id\" : 6, \"plz\" : \"plz\" } ], \"id\" : 0, \"bankverbindungen\" : [ { \"kontonummer\" : \"kontonummer\", \"bankleitzahl\" : \"bankleitzahl\", \"iban\" : \"iban\", \"land\" : \"land\", \"id\" : 5, \"bankname\" : \"bankname\", \"bic\" : \"bic\" }, { \"kontonummer\" : \"kontonummer\", \"bankleitzahl\" : \"bankleitzahl\", \"iban\" : \"iban\", \"land\" : \"land\", \"id\" : 5, \"bankname\" : \"bankname\", \"bic\" : \"bic\" } ] } ]";
-                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                    break;
-                }
-            }
-        });
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-
-    }
-
+    );
 }
