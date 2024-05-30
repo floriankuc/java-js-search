@@ -1,0 +1,198 @@
+openapi: 3.0.0
+info:
+  title: API fuer das Leistungssystem REO
+  version: 1.0.0-SNAPSHOT
+servers:
+- url: http://localhost:8443/rest/intern
+security:
+- basicAuth: []
+paths:
+  /personen:
+    get:
+      operationId: readPersonenBySearchParams
+      parameters:
+      - explode: true
+        in: query
+        name: vorname
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: nachname
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: iban
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: email
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Person'
+                type: array
+          description: Alles erfolgreich
+        "400":
+          description: Mindestens ein Parameter darf nicht null sein
+      summary: Liefert zu Suchkriterien passende Personen
+      x-accepts:
+      - application/json
+components:
+  schemas:
+    Anschrift:
+      example:
+        ort: ort
+        strasse: strasse
+        hausnummer: hausnummer
+        land: land
+        id: 6
+        plz: plz
+      properties:
+        id:
+          format: int64
+          type: integer
+        strasse:
+          type: string
+        hausnummer:
+          type: string
+        plz:
+          type: string
+        ort:
+          type: string
+        land:
+          type: string
+      required:
+      - id
+    Bankverbindung:
+      example:
+        kontonummer: kontonummer
+        bankleitzahl: bankleitzahl
+        iban: iban
+        land: land
+        id: 5
+        bankname: bankname
+        bic: bic
+      properties:
+        id:
+          format: int64
+          type: integer
+        iban:
+          type: string
+        bankname:
+          type: string
+        bankleitzahl:
+          type: string
+        bic:
+          type: string
+        kontonummer:
+          type: string
+        land:
+          type: string
+      required:
+      - id
+    Kommunikationsadresse:
+      example:
+        telefon: telefon
+        id: 1
+        email: email
+      properties:
+        id:
+          format: int64
+          type: integer
+        email:
+          type: string
+        telefon:
+          type: string
+      required:
+      - id
+    Person:
+      example:
+        kommunikationsadressen:
+        - telefon: telefon
+          id: 1
+          email: email
+        - telefon: telefon
+          id: 1
+          email: email
+        vorname: vorname
+        nachname: nachname
+        geschlecht: u
+        anschriften:
+        - ort: ort
+          strasse: strasse
+          hausnummer: hausnummer
+          land: land
+          id: 6
+          plz: plz
+        - ort: ort
+          strasse: strasse
+          hausnummer: hausnummer
+          land: land
+          id: 6
+          plz: plz
+        id: 0
+        bankverbindungen:
+        - kontonummer: kontonummer
+          bankleitzahl: bankleitzahl
+          iban: iban
+          land: land
+          id: 5
+          bankname: bankname
+          bic: bic
+        - kontonummer: kontonummer
+          bankleitzahl: bankleitzahl
+          iban: iban
+          land: land
+          id: 5
+          bankname: bankname
+          bic: bic
+      properties:
+        id:
+          format: int64
+          type: integer
+        vorname:
+          type: string
+        nachname:
+          type: string
+        geschlecht:
+          enum:
+          - u
+          - m
+          - w
+          - x
+          - d
+          type: string
+        anschriften:
+          items:
+            $ref: '#/components/schemas/Anschrift'
+          type: array
+        kommunikationsadressen:
+          items:
+            $ref: '#/components/schemas/Kommunikationsadresse'
+          type: array
+        bankverbindungen:
+          items:
+            $ref: '#/components/schemas/Bankverbindung'
+          type: array
+      required:
+      - id
+  securitySchemes:
+    basicAuth:
+      scheme: basic
+      type: http
