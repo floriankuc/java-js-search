@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "start:service": "cd service && mvn spring-boot:run",
+    "start:client": "cd client && npm run dev",
+    "start": "npm run start:service & npm run start:client",
+    "prepare": "husky"
+  },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0"
   },

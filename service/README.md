@@ -19,3 +19,13 @@ You can view the api documentation in swagger-ui by pointing to
 http://localhost:8443/swagger-ui.html
 
 Change default port value in application.properties
+
+## About
+
+This server is currently not hooked up to a database. A dataloader parses some provided JSON data into POJOs to act as a persistence layer.
+
+It holds this persistence data in form of `Person`s but will only serve `PersonDTO`s according to data minimisation.
+
+## Tests
+
+Run `mvn test` 
