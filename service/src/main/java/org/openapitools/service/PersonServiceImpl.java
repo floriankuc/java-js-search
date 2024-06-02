@@ -1,6 +1,7 @@
 package org.openapitools.service;
 
 import org.openapitools.dao.PersonDAO;
+import org.openapitools.dto.PersonDTO;
 import org.openapitools.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> searchPersons(String vorname, String nachname, String iban, String email) {
+    public List<PersonDTO> searchPersons(String vorname, String nachname, String iban, String email) {
         if (vorname == null && nachname == null && iban == null && email == null) {
             throw new RuntimeException("At least one search criterion must be provided.");
         }

@@ -50,6 +50,8 @@ paths:
           description: Alles erfolgreich
         "400":
           description: Mindestens ein Parameter darf nicht null sein
+        "404":
+          description: No person was found with the provided parameters.
       summary: Liefert zu Suchkriterien passende Personen
       x-accepts:
       - application/json

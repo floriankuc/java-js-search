@@ -5,6 +5,7 @@
  */
 package org.openapitools.api;
 
+import org.openapitools.dto.PersonDTO;
 import org.openapitools.model.Person;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -51,7 +52,9 @@ public interface PersonenApi {
             @ApiResponse(responseCode = "200", description = "Alles erfolgreich", content = {
                 @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Person.class)))
             }),
-            @ApiResponse(responseCode = "400", description = "Mindestens ein Parameter darf nicht null sein")
+            @ApiResponse(responseCode = "400", description = "Mindestens ein Parameter darf nicht null sein"),
+            @ApiResponse(responseCode = "404", description = "Keine Ergebnisse gefunden")
+
         },
         security = {
             @SecurityRequirement(name = "basicAuth")
@@ -63,7 +66,7 @@ public interface PersonenApi {
         produces = { "application/json" }
     )
 
-    ResponseEntity<List<Person>> readPersonenBySearchParams(
+    ResponseEntity<List<PersonDTO>> readPersonenBySearchParams(
         @Parameter(name = "vorname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "vorname", required = false) String vorname,
         @Parameter(name = "nachname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "nachname", required = false) String nachname,
         @Parameter(name = "iban", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "iban", required = false) String iban,
