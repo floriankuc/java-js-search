@@ -22,6 +22,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "cypress/e2e", "setupTests.ts"],
+  "include": ["src", "cypress/e2e", "setupTests.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
