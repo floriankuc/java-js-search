@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { PersonResultTable } from "./person-result-table";
+import { render } from "../../utils/test-utils";
+import i18next from "i18next";
 
 describe("PersonResultTable", () => {
   it("renders table headers correctly", () => {
@@ -16,12 +18,26 @@ describe("PersonResultTable", () => {
 
     render(<PersonResultTable persons={persons} />);
 
-    expect(screen.getByText("Vorname")).toBeInTheDocument();
-    expect(screen.getByText("Nachname")).toBeInTheDocument();
-    expect(screen.getByText("Geschlecht")).toBeInTheDocument();
-    expect(screen.getByText("Anschriften")).toBeInTheDocument();
-    expect(screen.getByText("Kommunikationsadressen")).toBeInTheDocument();
-    expect(screen.getByText("IBANs")).toBeInTheDocument();
+    expect(
+      screen.getByText(i18next.t("personTable.tableHeaders.vorname"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18next.t("personTable.tableHeaders.nachname"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18next.t("personTable.tableHeaders.geschlecht"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18next.t("personTable.tableHeaders.anzahlAnschriften"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        i18next.t("personTable.tableHeaders.anzahlKommunikationsadressen")
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18next.t("personTable.tableHeaders.ibans"))
+    ).toBeInTheDocument();
   });
 
   it("renders person data correctly", () => {

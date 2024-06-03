@@ -7,7 +7,8 @@ import {
   UseFormClearErrors,
 } from "react-hook-form";
 import IBAN from "iban";
-import { PersonSearchFormData } from "../../containers/form-container";
+import { PersonSearchFormData } from "../../containers/form-container/form-container";
+import { useTranslation } from "react-i18next";
 
 interface PersonSearchFormProps {
   onSubmit: (
@@ -20,14 +21,16 @@ interface PersonSearchFormProps {
   disabled: boolean;
 }
 
-export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
+export function PersonSearchForm({
   onSubmit,
   control,
   clearErrors,
   errors,
   isDirty,
   disabled,
-}) => {
+}: PersonSearchFormProps): React.FunctionComponentElement<PersonSearchFormProps> {
+  const { t } = useTranslation();
+
   return (
     <form onSubmit={onSubmit}>
       <Controller
@@ -37,8 +40,8 @@ export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
         disabled={disabled}
         rules={{
           pattern: {
-            value: /^[a-zA-ZäöüÄÖÜß]+$/, // Include umlauts and ß
-            message: "Vorname may only contain letters",
+            value: /^[a-zA-ZäöüÄÖÜß]+$/,
+            message: t("personSearch.helperTexts.vorname"),
           },
         }}
         render={({ field, fieldState }) => (
@@ -59,7 +62,7 @@ export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
         rules={{
           pattern: {
             value: /^[a-zA-ZäöüÄÖÜß]+$/,
-            message: "Nachname may only contain letters",
+            message: t("personSearch.helperTexts.nachname"),
           },
         }}
         render={({ field, fieldState }) => (
@@ -80,7 +83,7 @@ export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
         rules={{
           pattern: {
             value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-            message: "Invalid email address",
+            message: t("personSearch.helperTexts.email"),
           },
         }}
         render={({ field, fieldState }) => (
@@ -104,7 +107,8 @@ export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
         defaultValue=""
         disabled={disabled}
         rules={{
-          validate: (value) => !value || IBAN.isValid(value) || "Invalid IBAN",
+          validate: (value) =>
+            !value || IBAN.isValid(value) || t("personSearch.helperTexts.iban"),
         }}
         render={({ field, fieldState }) => (
           <TextField
@@ -125,8 +129,8 @@ export const PersonSearchForm: React.FC<PersonSearchFormProps> = ({
         variant="contained"
         disabled={disabled || !isDirty || !!Object.keys(errors).length}
       >
-        Submit
+        {t("personSearch.submit")}
       </Button>
     </form>
   );
-};
+}

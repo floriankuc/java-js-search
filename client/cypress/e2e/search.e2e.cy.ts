@@ -1,10 +1,13 @@
+import {de} from "../../src/i18n/translations/de";
+
 describe('Searching for persons', () => {
+
   beforeEach(() => {
     cy.visit('/');
   });
 
   it('should render the app', () => {
-    cy.get('h1').contains('Search for persons');
+    cy.get('h1').contains(de.translation.personSearch.headline);
   });
 
   it('should complete the form and submit', () => {
@@ -21,7 +24,7 @@ describe('Searching for persons', () => {
     cy.get('.MuiCircularProgress-root').should('exist');
 
     // Verify the form submission
-    cy.get('h2').contains('Search results');
+    cy.get('h2').contains(de.translation.personSearch.results);
     cy.get('table').should('be.visible');
 
     // Confirm loading spinner is gone
@@ -41,7 +44,7 @@ describe('Searching for persons', () => {
     cy.get('.MuiCircularProgress-root').should('exist');
 
     // Verify the form submission
-    cy.get('p').contains('Request failed with status code 404');
+    cy.get('p').contains(de.translation.personSearch.errors.notFound);
 
     // Confirm loading spinner is visible
     cy.get('.MuiCircularProgress-root').should('not.exist');

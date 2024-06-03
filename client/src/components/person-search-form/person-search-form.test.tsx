@@ -1,7 +1,9 @@
-import { fireEvent, render, renderHook, screen } from "@testing-library/react";
+import { fireEvent, renderHook, screen } from "@testing-library/react";
 import { PersonSearchForm } from "./person-search-form";
 import { Control, useForm } from "react-hook-form";
-import { PersonSearchFormData } from "../../containers/form-container";
+import { PersonSearchFormData } from "../../containers/form-container/form-container";
+import i18next from "i18next";
+import { render } from "../../utils/test-utils";
 
 const { result } = renderHook(() => useForm());
 
@@ -26,10 +28,18 @@ describe("PersonSearchForm", () => {
       />
     );
 
-    expect(screen.getByLabelText("Vorname")).toBeInTheDocument();
-    expect(screen.getByLabelText("Nachname")).toBeInTheDocument();
-    expect(screen.getByLabelText("Email")).toBeInTheDocument();
-    expect(screen.getByLabelText("IBAN")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18next.t("personSearch.formFields.vorname"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18next.t("personSearch.formFields.nachname"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18next.t("personSearch.formFields.email"))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18next.t("personSearch.formFields.iban"))
+    ).toBeInTheDocument();
   });
 
   it("disables submit button when form has errors", () => {
@@ -42,14 +52,14 @@ describe("PersonSearchForm", () => {
             unknown
           >
         }
-        errors={{ email: { message: "Email is required", type: "required" } }}
+        errors={{ email: { message: "Test", type: "pattern" } }}
         clearErrors={() => {}}
         isDirty={false}
         disabled={false}
       />
     );
 
-    const submitButton = screen.getByText("Submit");
+    const submitButton = screen.getByText(i18next.t("personSearch.submit"));
 
     expect(submitButton).toBeDisabled();
   });
@@ -71,7 +81,7 @@ describe("PersonSearchForm", () => {
       />
     );
 
-    const submitButton = screen.getByText("Submit");
+    const submitButton = screen.getByText(i18next.t("personSearch.submit"));
 
     expect(submitButton).toBeDisabled();
   });
@@ -93,20 +103,32 @@ describe("PersonSearchForm", () => {
       />
     );
 
-    fireEvent.change(screen.getByLabelText("Vorname"), {
-      target: { value: "John" },
-    });
-    fireEvent.change(screen.getByLabelText("Nachname"), {
-      target: { value: "Doe" },
-    });
-    fireEvent.change(screen.getByLabelText("Email"), {
-      target: { value: "john@example.com" },
-    });
-    fireEvent.change(screen.getByLabelText("IBAN"), {
-      target: { value: "DE89370400440532013000" },
-    });
+    fireEvent.change(
+      screen.getByLabelText(i18next.t("personSearch.formFields.vorname")),
+      {
+        target: { value: "John" },
+      }
+    );
+    fireEvent.change(
+      screen.getByLabelText(i18next.t("personSearch.formFields.nachname")),
+      {
+        target: { value: "Doe" },
+      }
+    );
+    fireEvent.change(
+      screen.getByLabelText(i18next.t("personSearch.formFields.email")),
+      {
+        target: { value: "john@example.com" },
+      }
+    );
+    fireEvent.change(
+      screen.getByLabelText(i18next.t("personSearch.formFields.iban")),
+      {
+        target: { value: "DE89370400440532013000" },
+      }
+    );
 
-    fireEvent.click(screen.getByText("Submit"));
+    fireEvent.click(screen.getByText(i18next.t("personSearch.submit")));
 
     expect(mockSubmit).toHaveBeenCalledTimes(1);
   });

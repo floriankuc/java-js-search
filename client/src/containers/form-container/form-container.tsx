@@ -6,6 +6,7 @@ import { fetcher } from "../../utils/fetch";
 import { Alert, CircularProgress } from "@mui/material";
 import { AxiosError } from "axios";
 import { removeEmptyValues } from "../../utils/helpers";
+import { useTranslation } from "react-i18next";
 
 export interface PersonSearchFormData {
   vorname: string;
@@ -17,6 +18,8 @@ export interface PersonSearchFormData {
 export function FormContainer(): FunctionComponentElement<
   Record<string, never>
 > {
+  const { t } = useTranslation();
+
   const {
     handleSubmit,
     control,
@@ -42,16 +45,16 @@ export function FormContainer(): FunctionComponentElement<
 
     try {
       const response = await fetcher.get<Person[]>(
-        "personen",
+        "/personen",
         removeEmptyValues<PersonSearchFormData>(data)
       );
 
       setPersons(response);
     } catch (error) {
       if ((error as AxiosError).response?.status === 404) {
-        setError((error as AxiosError).message);
+        setError(t("personSearch.errors.notFound"));
       } else {
-        setError("An error occurred while searching for persons");
+        setError(t("personSearch.errors.general"));
       }
     } finally {
       setLoading(false);
@@ -60,8 +63,9 @@ export function FormContainer(): FunctionComponentElement<
 
   return (
     <>
+      <h1>{t("personSearch.headline")}</h1>
       <Alert className="m-b-l" severity="info">
-        Mindestens ein Feld muss ausgefüllt werden.
+        {t("personSearch.info")}
       </Alert>
       <PersonSearchForm
         errors={errors}
@@ -79,7 +83,7 @@ export function FormContainer(): FunctionComponentElement<
       )}
       {!error && !loading && persons.length > 0 && (
         <>
-          <h2>Search results</h2>
+          <h2>{t("personSearch.results")}</h2>
           <PersonResultTable persons={persons} />
         </>
       )}

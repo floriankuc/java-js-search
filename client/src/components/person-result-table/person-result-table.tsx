@@ -8,29 +8,38 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import i18next from "i18next";
 
 interface PersonResultTableProps {
   persons: Person[];
 }
 
-const tableHeaders = {
-  vorname: "Vorname",
-  nachname: "Nachname",
-  geschlecht: "Geschlecht",
-  numberOfAnschriften: "Anschriften",
-  numberOfKommunikationsadressen: "Kommunikationsadressen",
-  ibans: "IBANs",
-};
+function personTableHeaders(): Record<keyof Person, string> {
+  return {
+    vorname: i18next.t("personTable.tableHeaders.vorname"),
+    nachname: i18next.t("personTable.tableHeaders.nachname"),
+    geschlecht: i18next.t("personTable.tableHeaders.geschlecht"),
+    numberOfAnschriften: i18next.t(
+      "personTable.tableHeaders.anzahlAnschriften"
+    ),
+    numberOfKommunikationsadressen: i18next.t(
+      "personTable.tableHeaders.anzahlKommunikationsadressen"
+    ),
+    ibans: i18next.t("personTable.tableHeaders.ibans"),
+  };
+}
 
-export const PersonResultTable: React.FC<PersonResultTableProps> = ({
+export function PersonResultTable({
   persons,
-}) => {
+}: PersonResultTableProps): React.FunctionComponentElement<
+  React.FC<PersonResultTableProps>
+> {
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
-            {Object.values(tableHeaders).map((header, i) => (
+            {Object.values(personTableHeaders()).map((header, i) => (
               <TableCell key={i}>{header}</TableCell>
             ))}
           </TableRow>
@@ -62,4 +71,4 @@ export const PersonResultTable: React.FC<PersonResultTableProps> = ({
       </Table>
     </TableContainer>
   );
-};
+}
