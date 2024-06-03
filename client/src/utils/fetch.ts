@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const configAxios: AxiosRequestConfig = {
-  baseURL: import.meta.env.VITE_API_BASE_URL ?? '',
+    // In the real world this would be in an .env
+  baseURL: "http://localhost:8443/rest/intern",
   timeout: 10 * 1000,
 };
 
