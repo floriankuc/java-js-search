@@ -1,8 +1,9 @@
-package org.openapitools.api;
+package org.openapitools;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.openapitools.api.PersonenApiController;
 import org.openapitools.dto.PersonDTO;
 import org.openapitools.model.Person;
 import org.openapitools.service.PersonService;
@@ -11,11 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedTransferQueue;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -59,5 +58,39 @@ class PersonenApiControllerTest {
         mockMvc.perform(get("/rest/intern/personen?vorname=Anton"))
                 .andExpect(status().isNotFound());
     }
-}
 
+    @Test
+    void testReadPersonenBySearchParams_IllegalArgumentException_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(get("/rest/intern/personen?test=Invalid"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void testReadPersonenBySearchParams_InvalidVorname_ShouldReturnValidationError() throws Exception {
+        mockMvc.perform(get("/rest/intern/personen?vorname=123"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void testReadPersonenBySearchParams_InvalidNachname_ShouldReturnValidationError() throws Exception {
+        mockMvc.perform(get("/rest/intern/personen?nachname=123"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void testReadPersonenBySearchParams_InvalidEmail_ShouldReturnValidationError() throws Exception {
+        mockMvc.perform(get("/rest/intern/personen?email=invalid_email"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    void testReadPersonenBySearchParams_InvalidIban_ShouldReturnValidationError() throws Exception {
+        mockMvc.perform(get("/rest/intern/personen?iban=invalid_iban"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
+}
