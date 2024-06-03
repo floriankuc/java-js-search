@@ -1,6 +1,6 @@
-export const removeEmptyValues = <T>(
+export function removeEmptyValues<T>(
   data: T
-): Record<string, unknown> => {
+): Record<string, unknown> {
   const params: Record<string, unknown> = {};
   for (const key in data) {
     if (data[key as keyof T]) {
@@ -8,4 +8,4 @@ export const removeEmptyValues = <T>(
     }
   }
   return params;
-};
+}
