@@ -19,8 +19,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(PersonenApiController.class)
 class PersonenApiControllerTest {
@@ -62,8 +61,7 @@ class PersonenApiControllerTest {
     @Test
     void testReadPersonenBySearchParams_IllegalArgumentException_ShouldReturnBadRequest() throws Exception {
         mockMvc.perform(get("/rest/intern/personen?test=Invalid"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+                .andExpect(status().isBadRequest());
     }
 
     @Test

@@ -8,16 +8,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import javax.annotation.Generated;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.validation.Validator;
+import java.util.*;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2024-05-30T16:27:00.798725+02:00[Europe/Berlin]", comments = "Generator version: 7.6.0")
 @Controller
@@ -27,6 +28,8 @@ public class PersonenApiController implements PersonenApi {
     private final NativeWebRequest request;
     private final PersonService personService;
     private final Validator validator;
+
+    private static final Set<String> VALID_PARAMS = Set.of("vorname", "nachname", "iban", "email");
 
     @Autowired
     public PersonenApiController(NativeWebRequest request, PersonService personService, Validator validator) {
@@ -41,33 +44,25 @@ public class PersonenApiController implements PersonenApi {
     }
 
     @Override
-    public ResponseEntity<List<PersonDTO>> readPersonenBySearchParams(String vorname, String nachname, String iban, String email) {
-        if (!validateSearchParams(vorname, nachname, iban, email)) {
-            throw new IllegalArgumentException("Mindestens ein Parameter darf nicht null sein");
-        }
+    public ResponseEntity<List<PersonDTO>> readPersonenBySearchParams(
+            @Valid @RequestParam(value = "vorname", required = false) String vorname,
+            @Valid @RequestParam(value = "nachname", required = false) String nachname,
+            @Valid @RequestParam(value = "iban", required = false) String iban,
+            @Valid @RequestParam(value = "email", required = false) String email,
+            HttpServletRequest httpServletRequest) {
 
-        SearchParamsDTO searchParams = new SearchParamsDTO();
-        searchParams.setVorname(vorname);
-        searchParams.setNachname(nachname);
-        searchParams.setIban(iban);
-        searchParams.setEmail(email);
+        validateAdditionalParameters(httpServletRequest);
+        validateAtLeastOneParameter(vorname, nachname, iban, email);
+        validateSearchParams(vorname, nachname, iban, email);
 
-        validateSearchParamsDTO(searchParams);
-
-        // demo application will be run locally
-        // therefore imitating async behaviour
+        // Simulate async behavior for demo purposes
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
-        List<PersonDTO> result = personService.searchPersons(
-                searchParams.getVorname(),
-                searchParams.getNachname(),
-                searchParams.getIban(),
-                searchParams.getEmail()
-        );
+        List<PersonDTO> result = personService.searchPersons(vorname, nachname, iban, email);
 
         if (result.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Person nicht gefunden");
@@ -76,12 +71,23 @@ public class PersonenApiController implements PersonenApi {
         }
     }
 
-    private boolean validateSearchParams(String vorname, String nachname, String iban, String email) {
-        return vorname != null || nachname != null || iban != null || email != null;
+    private void validateAdditionalParameters(HttpServletRequest httpServletRequest) {
+        for (String paramName : httpServletRequest.getParameterMap().keySet()) {
+            if (!VALID_PARAMS.contains(paramName)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid search parameter: " + paramName);
+            }
+        }
     }
 
-    private void validateSearchParamsDTO(SearchParamsDTO searchParamsDTO) {
-        Set<ConstraintViolation<SearchParamsDTO>> violations = validator.validate(searchParamsDTO);
+    private void validateAtLeastOneParameter(String vorname, String nachname, String iban, String email) {
+        if (vorname == null && nachname == null && iban == null && email == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "At least one search parameter must be set");
+        }
+    }
+
+    private void validateSearchParams(String vorname, String nachname, String iban, String email) {
+        SearchParamsDTO searchParams = new SearchParamsDTO(vorname, nachname, iban, email);
+        Set<ConstraintViolation<SearchParamsDTO>> violations = validator.validate(searchParams);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(violations);
         }

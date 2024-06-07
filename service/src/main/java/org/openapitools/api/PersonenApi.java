@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -67,9 +68,9 @@ public interface PersonenApi {
     )
 
     ResponseEntity<List<PersonDTO>> readPersonenBySearchParams(
-        @Parameter(name = "vorname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "vorname", required = false) String vorname,
-        @Parameter(name = "nachname", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "nachname", required = false) String nachname,
-        @Parameter(name = "iban", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "iban", required = false) String iban,
-        @Parameter(name = "email", description = "", in = ParameterIn.QUERY) @Valid @RequestParam(value = "email", required = false) String email
-    );
+            @Valid @RequestParam(value = "vorname", required = false) String vorname,
+            @Valid @RequestParam(value = "nachname", required = false) String nachname,
+            @Valid @RequestParam(value = "iban", required = false) String iban,
+            @Valid @RequestParam(value = "email", required = false) String email,
+            HttpServletRequest httpServletRequest);
 }

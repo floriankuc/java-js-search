@@ -19,6 +19,14 @@ public class SearchParamsDTO {
 
     // Getters and Setters
 
+
+    public SearchParamsDTO(String vorname, String nachname, String email, String iban) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.email = email;
+        this.iban = iban;
+    }
+
     public String getVorname() {
         return vorname;
     }
