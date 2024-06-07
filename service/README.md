@@ -28,4 +28,19 @@ It holds this persistence data in form of `Person`s but will only serve `PersonD
 
 ## Tests
 
-Run `mvn test` 
+Run `mvn test`
+
+## Search parameters
+
+The following search parameters can be set:
+
+- vorname
+- nachname
+- iban
+- email
+
+The service will validate against:
+
+- Invalid formats
+- Illegal search params or typos
+- The presence of at least one of the above-mentioned parameters
